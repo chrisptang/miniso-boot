@@ -1,0 +1,78 @@
+# Eclipse project files
+.classpath
+.project
+.settings/
+
+# Intellij project files
+*.iml
+.idea/
+.idea/*
+
+# hibernate & Spring files
+.myhibernatedata
+hibernate.cfg.xml
+hibernate.reveng.xml
+.springBeans
+
+# Others
+target/
+*.log
+log/
+logs/
+bak/
+reports/
+RemoteSystemsTempFiles/
+Servers/
+/src/main/webapp/WEB-INF/classes/*
+/src/main/webapp/userfiles/*
+.mymetadata
+.checkstyle
+
+.DS_Store
+.tern-project
+.war
+.zip
+.rar
+
+.externalToolBuilders/
+
+#c++-----------------------------
+#Codeblocks
+*.cbp
+*.depend
+*.layout
+
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran client files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+*.gz
+config-cache
