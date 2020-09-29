@@ -15,7 +15,7 @@ import java.util.Map;
 @ConditionalOnClass(
         name = {"org.apache.dubbo.config.spring.context.annotation.EnableDubbo"}
 )
-@ConfigurationProperties
+@ConfigurationProperties(prefix = "leqee-boot")
 public class LeqeeBootDubboAutoConfiguration {
 
     private static final String APPLICATION_NAME_PROPERTY = "spring.application.name";
