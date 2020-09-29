@@ -51,7 +51,7 @@ public class Result<T> implements Serializable {
      * @param <D>
      * @return
      */
-    public static <D> Result success(D data) {
+    public static <D> Result<D> success(D data) {
         return new Result(data, null, DEFAULT_SUCCESS_CODE);
     }
 
@@ -62,7 +62,7 @@ public class Result<T> implements Serializable {
      * @param message 错误消息
      * @return
      */
-    public static Result<?> failed(int code, String message) {
+    public static <D> Result<D> failed(int code, String message) {
         return new Result(null, message, code == DEFAULT_SUCCESS_CODE ? DEFAULT_FAILED_CODE : code);
     }
 
@@ -73,7 +73,7 @@ public class Result<T> implements Serializable {
      * @param message 错误消息
      * @return
      */
-    public static Result<?> failed(String message) {
+    public static <D> Result<D> failed(String message) {
         return new Result(null, message, DEFAULT_FAILED_CODE);
     }
 
@@ -88,7 +88,16 @@ public class Result<T> implements Serializable {
     }
 
     /**
-     * 判断一个result实例是否是失败的；
+     * 实例方法，请优先使用类方法；
+     *
+     * @return 判断一个result实例是否是成功的（服务调用无异常）；
+     */
+    public boolean isSuccess() {
+        return isSuccess(this);
+    }
+
+    /**
+     * 判断一个result实例是否是失败的（服务调用有异常，或者与预期不服）；
      *
      * @param result
      * @return
