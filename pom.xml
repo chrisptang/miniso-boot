@@ -24,6 +24,8 @@
     <modules>
         <module>leqee-boot-client</module>
         <module>leqee-boot-autoconfiguration</module>
+        <module>leqee-boot-xxl-job-autoconfiguration</module>
+        <module>leqee-boot-common</module>
     </modules>
 
     <dependencyManagement>

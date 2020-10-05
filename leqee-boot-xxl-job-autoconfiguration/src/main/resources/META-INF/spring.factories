@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.leqee.boot.autoconfiguration.xxljob.LeqeeBootXxlJobAutoConfiguration

@@ -4,6 +4,7 @@ import com.dianping.cat.Cat;
 import com.dianping.cat.configuration.client.entity.ClientConfigProperty;
 import com.dianping.cat.log.CatLogger;
 import com.dianping.cat.servlet.CatFilter;
+import com.leqee.boot.autoconfiguration.common.LogPathUtil;
 import net.dubboclub.catmonitor.DubboCat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,8 +14,6 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-
-import java.io.File;
 
 @Configuration
 @ConditionalOnClass(name = {"com.leqee.boot.autoconfiguration.annotation.EnableCat"})
@@ -60,20 +59,7 @@ public class LeqeeBootCatAutoConfiguration {
 
     private void initCatLogger() {
         //初始化CAT本地日志；
-        String userHome = System.getProperty("user.home");
-        if (userHome.endsWith("/")) {
-            userHome = userHome.substring(0, userHome.length() - 1);
-        }
-        String catLogHome = String.format("%s/logs/%s/cat", userHome, applicationName);
-        File catLogHomePath = new File(catLogHome);
-        if (!catLogHomePath.exists()) {
-            catLogHomePath.mkdirs();
-        } else if (!catLogHomePath.isDirectory()) {
-            catLogHomePath.deleteOnExit();
-            catLogHomePath.mkdirs();
-        }
-
-        CatLogger.updateLogHome(catLogHome);
+        CatLogger.updateLogHome(LogPathUtil.ensureLogPath(applicationName, "cat"));
     }
 
     public int getPort() {
