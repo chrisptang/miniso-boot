@@ -1,5 +1,6 @@
 package com.leqee.boot.autoconfiguration.xxljob;
 
+import com.leqee.boot.autoconfiguration.common.LogPathUtil;
 import com.xxl.job.core.executor.impl.XxlJobSpringExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +12,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.util.StringUtils;
 
 @Configuration
 @PropertySource(value = {"classpath:leqee-xxl-job.properties"})
@@ -37,10 +39,17 @@ public class LeqeeBootXxlJobAutoConfiguration {
     public XxlJobSpringExecutor xxlJobSpringExecutor() {
         XxlJobSpringExecutor xxlJobSpringExecutor = new XxlJobSpringExecutor();
         xxlJobSpringExecutor.setAppname(application);
+        xxlJobSpringExecutor.setAdminAddresses(xxlJobConfig.getAdminAddresses());
         xxlJobSpringExecutor.setLogRetentionDays(xxlJobConfig.getLogRetentionDays());
         xxlJobSpringExecutor.setPort(xxlJobConfig.getPort());
         xxlJobSpringExecutor.setAccessToken(xxlJobConfig.getAccessToken());
-        xxlJobSpringExecutor.setLogPath(xxlJobConfig.getLogPath());
+
+        // Log path, default to be /home/user-name/logs/application-name/xxl-job/
+        if (StringUtils.isEmpty(xxlJobConfig.getLogPath())) {
+            xxlJobSpringExecutor.setLogPath(LogPathUtil.ensureLogPath(application, "xxl-job"));
+        } else {
+            xxlJobSpringExecutor.setLogPath(xxlJobConfig.getLogPath());
+        }
 
         logger.info("XXL-JOB configured as:" + xxlJobConfig);
 
