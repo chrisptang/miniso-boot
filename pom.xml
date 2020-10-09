@@ -26,6 +26,7 @@
         <module>leqee-boot-autoconfiguration</module>
         <module>leqee-boot-xxl-job-autoconfiguration</module>
         <module>leqee-boot-common</module>
+        <module>leqee-boot-apollo-autoconfiguration</module>
     </modules>
 
     <dependencyManagement>
