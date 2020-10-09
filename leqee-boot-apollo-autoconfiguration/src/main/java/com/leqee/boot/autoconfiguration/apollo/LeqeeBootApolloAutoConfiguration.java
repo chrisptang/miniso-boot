@@ -33,6 +33,8 @@ public class LeqeeBootApolloAutoConfiguration implements SmartInitializingSingle
         env = System.getProperty("env", env);//系统的env属性为最高优先级；
 
         System.setProperty("apollo.configService", APOLLO_CONFIGURATION_SERVER.get(env));
+        // apollo.meta和apollo.configService 一般来说是同一个JVM实例，或者同一个集群；
+        System.setProperty("apollo.meta", APOLLO_CONFIGURATION_SERVER.get(env));
         if (!System.getProperties().containsKey("env")) {
             System.setProperty("env", env);
         }
