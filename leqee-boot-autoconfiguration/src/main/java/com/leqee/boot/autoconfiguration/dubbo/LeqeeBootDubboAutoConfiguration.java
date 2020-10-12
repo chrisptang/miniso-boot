@@ -25,7 +25,7 @@ public class LeqeeBootDubboAutoConfiguration {
     private static final String DEFAULT_ZOOKEEPER_URL = "zookeeper://localhost:2181";
 
     static {
-        DUBBO_REGISTRY_URLS.put("dev", "zookeeper://172.22.201.64:2181");
+        DUBBO_REGISTRY_URLS.put("dev", "zookeeper://172.22.15.41:2181");
         DUBBO_REGISTRY_URLS.put("test", "zookeeper://10.0.16.134:2181");
         DUBBO_REGISTRY_URLS.put("staging", "zookeeper://10.0.16.134:2181");
         DUBBO_REGISTRY_URLS.put("production", "zookeeper://10.0.16.134:2181");
