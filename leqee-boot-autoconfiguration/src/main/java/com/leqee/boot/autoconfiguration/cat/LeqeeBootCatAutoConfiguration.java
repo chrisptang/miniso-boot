@@ -6,6 +6,8 @@ import com.dianping.cat.log.CatLogger;
 import com.dianping.cat.servlet.CatFilter;
 import com.leqee.boot.autoconfiguration.common.LogPathUtil;
 import net.dubboclub.catmonitor.DubboCat;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -14,12 +16,29 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.util.StringUtils;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Configuration
 @ConditionalOnClass(name = {"com.leqee.boot.autoconfiguration.annotation.EnableCat"})
 @PropertySource("classpath:leqee-cat.properties")
 @ConfigurationProperties(prefix = "leqee-boot.cat")
 public class LeqeeBootCatAutoConfiguration {
+
+    private static final Logger logger = LoggerFactory.getLogger(LeqeeBootCatAutoConfiguration.class);
+
+    private static final Map<String, String> CAT_SERVER_LIST = new HashMap<>();
+
+    private static final String DEFAULT_CAT_SERVER = "172.22.15.41";
+
+    static {
+        CAT_SERVER_LIST.put("dev", "172.22.15.41");
+        CAT_SERVER_LIST.put("test", "10.0.16.134");
+        CAT_SERVER_LIST.put("staging", "10.0.16.134");
+        CAT_SERVER_LIST.put("production", "10.0.16.134");
+    }
 
     private int port;
 
@@ -29,6 +48,9 @@ public class LeqeeBootCatAutoConfiguration {
 
     @Value("${spring.application.name:unknown}")
     private String applicationName;
+
+    @Value("${leqee-boot.env:dev}")
+    private String applicationEnv;
 
     @Autowired
     private LeqeeBootCatAutoConfiguration catAutoConfiguration;
@@ -41,9 +63,17 @@ public class LeqeeBootCatAutoConfiguration {
         property.setAppId(applicationName);
         property.setPort(port);
         property.setHttpPort(httpPort);
-        property.setServers(servers);
+        if (null == servers || servers.length <= 0) {
+            property.setServers(getCatServers());
+        } else {
+            property.setServers(servers);
+        }
 
         Cat.initialize(property);
+
+        if (logger.isInfoEnabled()) {
+            logger.info("Is CAT initialized:" + Cat.isInitialized());
+        }
 
         DubboCat.enable();
 
@@ -54,7 +84,27 @@ public class LeqeeBootCatAutoConfiguration {
         registration.setName("cat-filter");
         registration.setOrder(1);
 
+
         return registration;
+    }
+
+    private String[] getCatServers() {
+//        InetAddress inetAddress = null;
+//        try {
+//            inetAddress = InetAddress.getLocalHost();
+//            return new String[]{inetAddress.getHostAddress()};
+//        } catch (UnknownHostException e) {
+//            logger.error("Unable to find host ip:", e);
+//        }
+//        return new String[]{"127.0.0.1"};
+
+
+        String serverList = DEFAULT_CAT_SERVER;
+        if (CAT_SERVER_LIST.containsKey(applicationEnv)
+                && !StringUtils.isEmpty(CAT_SERVER_LIST.get(applicationEnv))) {
+            serverList = CAT_SERVER_LIST.get(applicationEnv);
+        }
+        return serverList.split(",");
     }
 
     private void initCatLogger() {
