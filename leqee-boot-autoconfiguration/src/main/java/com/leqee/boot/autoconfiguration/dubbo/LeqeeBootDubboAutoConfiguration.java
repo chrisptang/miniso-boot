@@ -42,7 +42,7 @@ public class LeqeeBootDubboAutoConfiguration {
     @ConfigurationProperties(prefix = "dubbo.application")
     public ApplicationConfig applicationConfig() {
         ApplicationConfig applicationConfig = new ApplicationConfig();
-        applicationConfig.setName(applicationName + "-from-auto-configuration");
+        applicationConfig.setName(applicationName);
 
         return applicationConfig;
     }
