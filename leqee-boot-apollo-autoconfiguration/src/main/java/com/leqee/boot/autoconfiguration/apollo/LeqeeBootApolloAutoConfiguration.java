@@ -1,6 +1,7 @@
 package com.leqee.boot.autoconfiguration.apollo;
 
 import com.ctrip.framework.apollo.ConfigService;
+import com.ctrip.framework.apollo.core.ConfigConsts;
 import com.ctrip.framework.apollo.spring.annotation.EnableApolloConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
  * 自动装配Apollo的远程配置；不同的环境不同的server地址；
  */
 @Configuration
-@EnableApolloConfig
+@EnableApolloConfig({ConfigConsts.NAMESPACE_APPLICATION, "leqee-ad.ad-common-config"})
 public class LeqeeBootApolloAutoConfiguration implements SmartInitializingSingleton {
     private static final Logger logger = LoggerFactory.getLogger(LeqeeBootApolloAutoConfiguration.class);
 
@@ -33,8 +34,8 @@ public class LeqeeBootApolloAutoConfiguration implements SmartInitializingSingle
         env = System.getProperty("env", env);//系统的env属性为最高优先级；
 
         System.setProperty("apollo.configService", APOLLO_CONFIGURATION_SERVER.get(env));
-        // apollo.meta和apollo.configService 一般来说是同一个JVM实例，或者同一个集群；
         System.setProperty("apollo.meta", APOLLO_CONFIGURATION_SERVER.get(env));
+        System.setProperty("apollo.bootstrap.eagerLoad.enabled", "true");
         if (!System.getProperties().containsKey("env")) {
             System.setProperty("env", env);
         }
