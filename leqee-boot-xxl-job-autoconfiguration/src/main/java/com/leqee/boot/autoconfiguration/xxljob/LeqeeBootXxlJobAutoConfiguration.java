@@ -55,4 +55,10 @@ public class LeqeeBootXxlJobAutoConfiguration {
 
         return xxlJobSpringExecutor;
     }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public XxlJobCatIntegration xxlJobCatIntegration() {
+        return new XxlJobCatIntegration();
+    }
 }
