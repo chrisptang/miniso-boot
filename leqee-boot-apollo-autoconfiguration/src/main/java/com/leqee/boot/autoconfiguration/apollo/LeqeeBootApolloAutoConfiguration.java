@@ -3,6 +3,7 @@ package com.leqee.boot.autoconfiguration.apollo;
 import com.ctrip.framework.apollo.ConfigService;
 import com.ctrip.framework.apollo.core.ConfigConsts;
 import com.ctrip.framework.apollo.spring.annotation.EnableApolloConfig;
+import com.leqee.boot.autoconfiguration.common.EnvUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.SmartInitializingSingleton;
@@ -29,16 +30,15 @@ public class LeqeeBootApolloAutoConfiguration implements SmartInitializingSingle
         APOLLO_CONFIGURATION_SERVER.put("staging", "http://10.0.16.134:30004");
         APOLLO_CONFIGURATION_SERVER.put("production", "http://10.0.16.134:30004");
 
-        String env = "dev";//默认
-        env = System.getProperty("leqee-boot.env", env);//通过leqee-boot.env覆盖
-        env = System.getProperty("env", env);//系统的env属性为最高优先级；
+        String env = EnvUtil.getEnv();
+        if (!APOLLO_CONFIGURATION_SERVER.containsKey(env)) {
+            //fullback to dev;
+            env = "dev";
+        }
 
         System.setProperty("apollo.configService", APOLLO_CONFIGURATION_SERVER.get(env));
         System.setProperty("apollo.meta", APOLLO_CONFIGURATION_SERVER.get(env));
         System.setProperty("apollo.bootstrap.eagerLoad.enabled", "true");
-        if (!System.getProperties().containsKey("env")) {
-            System.setProperty("env", env);
-        }
     }
 
     @Override
