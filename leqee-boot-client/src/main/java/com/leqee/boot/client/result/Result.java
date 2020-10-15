@@ -168,6 +168,9 @@ public class Result<T> implements Serializable {
         if (!("" + this.getMessage()).equals("" + objResult.getMessage())) {
             return false;
         }
+        if (isFailed(this) && isFailed(objResult)) {
+            return this.code == objResult.getCode() && ("" + this.getMessage()).equals("" + objResult.getMessage());
+        }
 
         return this.getData() != null && this.getData().equals(objResult.getData());
     }
