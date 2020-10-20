@@ -4,6 +4,7 @@ import com.dianping.cat.Cat;
 import com.dianping.cat.configuration.client.entity.ClientConfigProperty;
 import com.dianping.cat.log.CatLogger;
 import com.dianping.cat.servlet.CatFilter;
+import com.leqee.boot.autoconfiguration.common.EnvUtil;
 import com.leqee.boot.autoconfiguration.common.LogPathUtil;
 import net.dubboclub.catmonitor.DubboCat;
 import org.slf4j.Logger;
@@ -35,9 +36,9 @@ public class LeqeeBootCatAutoConfiguration {
 
     static {
         CAT_SERVER_LIST.put("dev", "172.22.15.41");
-        CAT_SERVER_LIST.put("test", "10.0.16.134");
-        CAT_SERVER_LIST.put("staging", "10.0.16.134");
-        CAT_SERVER_LIST.put("production", "10.0.16.134");
+        CAT_SERVER_LIST.put("fat", "10.0.16.134");
+        CAT_SERVER_LIST.put("local", "127.0.0.1");
+        CAT_SERVER_LIST.put("prod", "10.0.16.134");
     }
 
     private int port;
@@ -48,9 +49,6 @@ public class LeqeeBootCatAutoConfiguration {
 
     @Value("${spring.application.name:unknown}")
     private String applicationName;
-
-    @Value("${leqee-boot.env:dev}")
-    private String applicationEnv;
 
     @Autowired
     private LeqeeBootCatAutoConfiguration catAutoConfiguration;
@@ -89,20 +87,11 @@ public class LeqeeBootCatAutoConfiguration {
     }
 
     private String[] getCatServers() {
-//        InetAddress inetAddress = null;
-//        try {
-//            inetAddress = InetAddress.getLocalHost();
-//            return new String[]{inetAddress.getHostAddress()};
-//        } catch (UnknownHostException e) {
-//            logger.error("Unable to find host ip:", e);
-//        }
-//        return new String[]{"127.0.0.1"};
-
-
         String serverList = DEFAULT_CAT_SERVER;
-        if (CAT_SERVER_LIST.containsKey(applicationEnv)
-                && !StringUtils.isEmpty(CAT_SERVER_LIST.get(applicationEnv))) {
-            serverList = CAT_SERVER_LIST.get(applicationEnv);
+        String env = EnvUtil.getEnv();
+        if (CAT_SERVER_LIST.containsKey(env)
+                && !StringUtils.isEmpty(CAT_SERVER_LIST.get(env))) {
+            serverList = CAT_SERVER_LIST.get(env);
         }
         return serverList.split(",");
     }

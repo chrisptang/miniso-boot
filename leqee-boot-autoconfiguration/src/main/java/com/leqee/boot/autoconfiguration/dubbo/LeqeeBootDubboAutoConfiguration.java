@@ -1,5 +1,6 @@
 package com.leqee.boot.autoconfiguration.dubbo;
 
+import com.leqee.boot.autoconfiguration.common.EnvUtil;
 import org.apache.dubbo.config.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,16 +28,12 @@ public class LeqeeBootDubboAutoConfiguration {
     static {
         DUBBO_REGISTRY_URLS.put("local", "zookeeper://localhost:2181");
         DUBBO_REGISTRY_URLS.put("dev", "zookeeper://172.22.15.41:2181");
-        DUBBO_REGISTRY_URLS.put("test", "zookeeper://10.0.16.134:2181");
-        DUBBO_REGISTRY_URLS.put("staging", "zookeeper://10.0.16.134:2181");
-        DUBBO_REGISTRY_URLS.put("production", "zookeeper://10.0.16.134:2181");
+        DUBBO_REGISTRY_URLS.put("fat", "zookeeper://10.0.16.134:2181");
+        DUBBO_REGISTRY_URLS.put("prod", "zookeeper://10.0.16.134:2181");
     }
 
     @Value("${spring.application.name}")
     private String applicationName;
-
-    @Value("${leqee-boot.env:dev}")
-    private String applicationEnv;
 
     @Bean
     @ConfigurationProperties(prefix = "dubbo.application")
@@ -50,9 +47,10 @@ public class LeqeeBootDubboAutoConfiguration {
     @Bean
     @ConfigurationProperties(prefix = "dubbo.registry")
     public RegistryConfig registryConfig() {
+        String env = EnvUtil.getEnv();
         RegistryConfig registryConfig = new RegistryConfig();
-        if (DUBBO_REGISTRY_URLS.containsKey(applicationEnv)) {
-            registryConfig.setAddress(DUBBO_REGISTRY_URLS.get(applicationEnv));
+        if (DUBBO_REGISTRY_URLS.containsKey(env)) {
+            registryConfig.setAddress(DUBBO_REGISTRY_URLS.get(env));
         } else {
             registryConfig.setAddress(DEFAULT_ZOOKEEPER_URL);
         }

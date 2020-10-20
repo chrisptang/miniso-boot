@@ -21,6 +21,8 @@ public class LeqeeBootXxlJobAutoConfiguration {
 
     private static final Logger logger = LoggerFactory.getLogger(LeqeeBootXxlJobAutoConfiguration.class);
 
+    private static final String DEFAULT_ADMIN_ADDRESS = "http://localhost:30003/xxl-job-admin";
+
     @Value("${spring.application.name:unknown}")
     private String application;
 
@@ -39,7 +41,12 @@ public class LeqeeBootXxlJobAutoConfiguration {
     public XxlJobSpringExecutor xxlJobSpringExecutor() {
         XxlJobSpringExecutor xxlJobSpringExecutor = new XxlJobSpringExecutor();
         xxlJobSpringExecutor.setAppname(application);
-        xxlJobSpringExecutor.setAdminAddresses(xxlJobConfig.getAdminAddresses());
+        if (StringUtils.isEmpty(xxlJobConfig.getAdminAddresses())) {
+            logger.warn("\n========\nconfiguration key:xxl.job.executor.adminAddress is not found, using default address:" + DEFAULT_ADMIN_ADDRESS);
+            xxlJobSpringExecutor.setAdminAddresses(DEFAULT_ADMIN_ADDRESS);
+        } else {
+            xxlJobSpringExecutor.setAdminAddresses(xxlJobConfig.getAdminAddresses());
+        }
         xxlJobSpringExecutor.setLogRetentionDays(xxlJobConfig.getLogRetentionDays());
         xxlJobSpringExecutor.setPort(xxlJobConfig.getPort());
         xxlJobSpringExecutor.setAccessToken(xxlJobConfig.getAccessToken());
