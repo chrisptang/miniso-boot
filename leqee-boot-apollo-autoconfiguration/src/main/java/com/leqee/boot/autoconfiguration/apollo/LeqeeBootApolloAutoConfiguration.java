@@ -26,9 +26,10 @@ public class LeqeeBootApolloAutoConfiguration implements SmartInitializingSingle
 
     static {
         APOLLO_CONFIGURATION_SERVER.put("dev", "http://172.22.15.41:30004");
-        APOLLO_CONFIGURATION_SERVER.put("test", "http://10.0.16.134:30004");
+        APOLLO_CONFIGURATION_SERVER.put("local", "http://127.0.0.1:30004");
+        APOLLO_CONFIGURATION_SERVER.put("fat", "http://47.92.192.33:30004");
         APOLLO_CONFIGURATION_SERVER.put("staging", "http://10.0.16.134:30004");
-        APOLLO_CONFIGURATION_SERVER.put("production", "http://10.0.16.134:30004");
+        APOLLO_CONFIGURATION_SERVER.put("prod", "http://10.0.16.134:30004");
 
         String env = EnvUtil.getEnv();
         if (!APOLLO_CONFIGURATION_SERVER.containsKey(env)) {
@@ -44,7 +45,7 @@ public class LeqeeBootApolloAutoConfiguration implements SmartInitializingSingle
     @Override
     public void afterSingletonsInstantiated() {
         Set<String> names = ConfigService.getAppConfig().getPropertyNames();
-        logger.info("Apollo configurations:\n" + names.stream().collect(Collectors.joining(",")));
+        logger.info("=====\nApollo configuration keys:\n" + names.stream().collect(Collectors.joining(",")));
         for (String key : names) {
             if (logger.isInfoEnabled()) {
                 logger.info(String.format("Apollo key:%s, value:%s", key, ConfigService.getAppConfig().getProperty(key, "")));
