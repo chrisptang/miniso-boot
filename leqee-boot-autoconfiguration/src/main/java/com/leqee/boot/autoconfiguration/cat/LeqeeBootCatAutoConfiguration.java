@@ -9,11 +9,16 @@ import com.leqee.boot.autoconfiguration.common.LogPathUtil;
 import net.dubboclub.catmonitor.DubboCat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -21,12 +26,13 @@ import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Configuration
 @ConditionalOnClass(name = {"com.leqee.boot.autoconfiguration.annotation.EnableCat"})
 @PropertySource("classpath:leqee-cat.properties")
 @ConfigurationProperties(prefix = "leqee-boot.cat")
-public class LeqeeBootCatAutoConfiguration {
+public class LeqeeBootCatAutoConfiguration implements InitializingBean, ApplicationContextAware {
 
     private static final Logger logger = LoggerFactory.getLogger(LeqeeBootCatAutoConfiguration.class);
 
@@ -41,17 +47,29 @@ public class LeqeeBootCatAutoConfiguration {
         CAT_SERVER_LIST.put("prod", "10.0.16.134");
     }
 
+    @Value("${leqee.ad.common.cat.port:2280}")
     private int port;
 
+    @Value("${leqee.ad.common.cat.httpPort:30000}")
     private int httpPort;
-
-    private String[] servers;
 
     @Value("${spring.application.name:unknown}")
     private String applicationName;
 
-    @Autowired
-    private LeqeeBootCatAutoConfiguration catAutoConfiguration;
+    @Value("${leqee.ad.common.cat.servers:172.22.15.41}")
+    private String[] servers;
+
+    @Bean
+    public HealthCheck defaultHealthCheck() {
+        return new DefaultHealthCheckImpl();
+    }
+
+    @Bean(destroyMethod = "preDestroy")
+    @ConditionalOnMissingBean
+    public ApplicationHealthCheckBiz applicationHealthCheckBiz() {
+        ApplicationHealthCheckBiz healthCheckBiz = new ApplicationHealthCheckBiz();
+        return healthCheckBiz;
+    }
 
     @Bean
     public FilterRegistrationBean catFilter() {
@@ -131,5 +149,24 @@ public class LeqeeBootCatAutoConfiguration {
 
     public void setApplicationName(String applicationName) {
         this.applicationName = applicationName;
+    }
+
+    private static final AtomicReference<ApplicationContext> APPLICATION_CONTEXT_ATOMIC_REFERENCE =
+            new AtomicReference<>();
+
+    @Autowired
+    private ApplicationHealthCheckBiz applicationHealthCheckBiz;
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        APPLICATION_CONTEXT_ATOMIC_REFERENCE.set(applicationContext);
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        applicationHealthCheckBiz.setHealthCheckList(
+                APPLICATION_CONTEXT_ATOMIC_REFERENCE.get()
+                        .getBeansOfType(HealthCheck.class).values());
+        applicationHealthCheckBiz.start();
     }
 }
