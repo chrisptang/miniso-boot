@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,6 +36,9 @@ public class LeqeeBootDubboAutoConfiguration {
     @Value("${spring.application.name}")
     private String applicationName;
 
+    @Value("${dubbo.registry.address:}")
+    private String dubboRegistryAddress;
+
     @Bean
     @ConfigurationProperties(prefix = "dubbo.application")
     public ApplicationConfig applicationConfig() {
@@ -49,12 +53,19 @@ public class LeqeeBootDubboAutoConfiguration {
     public RegistryConfig registryConfig() {
         String env = EnvUtil.getEnv();
         RegistryConfig registryConfig = new RegistryConfig();
-        if (DUBBO_REGISTRY_URLS.containsKey(env)) {
-            registryConfig.setAddress(DUBBO_REGISTRY_URLS.get(env));
+        registryConfig.setId(applicationName + "-dubbo-registry");
+
+        if (StringUtils.isEmpty(dubboRegistryAddress)) {
+            //set dubbo registry center address
+            if (DUBBO_REGISTRY_URLS.containsKey(env)) {
+                registryConfig.setAddress(DUBBO_REGISTRY_URLS.get(env));
+            } else {
+                registryConfig.setAddress(DEFAULT_ZOOKEEPER_URL);
+            }
         } else {
-            registryConfig.setAddress(DEFAULT_ZOOKEEPER_URL);
+            registryConfig.setAddress(RegistrySelector.selectPremierRegistryAddress(dubboRegistryAddress));
+            System.setProperty("dubbo.registry.address", registryConfig.getAddress());
         }
-        registryConfig.setId(applicationName + "-registry:" + registryConfig.getAddress());
         return registryConfig;
     }
 
