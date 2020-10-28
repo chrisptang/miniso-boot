@@ -1,8 +1,9 @@
 package com.leqee.boot.autoconfiguration.dubbo;
 
+import com.leqee.boot.autoconfiguration.NetworkUtil;
 import com.leqee.boot.autoconfiguration.common.EnvUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -19,6 +20,7 @@ import java.util.Map;
 @ConditionalOnClass(
         name = {"com.leqee.boot.autoconfiguration.annotation.EnableLeqeeDubbo"}
 )
+@Slf4j
 @PropertySource("classpath:leqee-boot.properties")
 public class LeqeeBootDubboAutoConfiguration {
 
@@ -38,6 +40,9 @@ public class LeqeeBootDubboAutoConfiguration {
 
     @Value("${dubbo.registry.address:}")
     private String dubboRegistryAddress;
+
+    @Value("${dubbo.registry.port:20887}")
+    private int dubboPort;
 
     @Bean
     @ConfigurationProperties(prefix = "dubbo.application")
@@ -66,19 +71,16 @@ public class LeqeeBootDubboAutoConfiguration {
             registryConfig.setAddress(RegistrySelector.selectPremierRegistryAddress(dubboRegistryAddress));
             System.setProperty("dubbo.registry.address", registryConfig.getAddress());
         }
+
         return registryConfig;
     }
-
-    @Autowired
-    private RegistryConfig registryConfig;
 
     @Bean
     @DependsOn("registryConfig")
     @ConfigurationProperties(prefix = "dubbo.config-center")
     public ConfigCenterConfig configCenterConfig() {
         ConfigCenterConfig configCenterConfig = new ConfigCenterConfig();
-        configCenterConfig.setAddress(registryConfig.getAddress());
-
+        configCenterConfig.setAddress(dubboRegistryAddress);
         return configCenterConfig;
     }
 
@@ -100,6 +102,20 @@ public class LeqeeBootDubboAutoConfiguration {
     @DependsOn("registryConfig")
     @ConfigurationProperties(prefix = "dubbo.protocol")
     public ProtocolConfig protocolConfig() {
-        return new ProtocolConfig();
+        ProtocolConfig protocolConfig = new ProtocolConfig();
+        int dubboPortToUse = dubboPort;
+        for (int i = 0; i < 20; i++) {
+            if (NetworkUtil.isLocalPortUsed(dubboPortToUse)) {
+                log.warn("*******\n*******\n*******\nDubbo port has been used:" + dubboPortToUse);
+                log.warn("Will try to use new dubbo port:" + (++dubboPortToUse));
+                continue;
+            } else {
+                protocolConfig.setPort(dubboPortToUse);
+                System.setProperty("dubbo.protocol.port", dubboPortToUse + "");
+                break;
+            }
+        }
+
+        return protocolConfig;
     }
 }

@@ -1,13 +1,11 @@
 package com.leqee.boot.autoconfiguration.dubbo;
 
-import com.dianping.cat.Cat;
 import org.springframework.util.StringUtils;
 
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.net.URI;
 import java.util.LinkedHashSet;
 import java.util.stream.Collectors;
+
+import static com.leqee.boot.autoconfiguration.NetworkUtil.isServerUp;
 
 public class RegistrySelector {
 
@@ -47,17 +45,5 @@ public class RegistrySelector {
         throw new RuntimeException("None of these registry is up:" + originalAddress);
     }
 
-    private static boolean isServerUp(String address) {
-        try {
-            URI url = new URI(address);
-            Socket socket = new Socket();
-            socket.connect(new InetSocketAddress(url.getHost(), url.getPort()), 600);
 
-            return true;
-        } catch (Exception e) {
-            Cat.logError("Unable to open socket toward:" + address, e);
-        }
-
-        return false;
-    }
 }
