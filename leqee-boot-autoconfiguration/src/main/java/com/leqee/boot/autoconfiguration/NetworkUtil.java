@@ -2,11 +2,13 @@ package com.leqee.boot.autoconfiguration;
 
 import com.dianping.cat.Cat;
 import com.dianping.cat.configuration.NetworkInterfaceManager;
+import lombok.extern.slf4j.Slf4j;
 
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.URI;
 
+@Slf4j
 public class NetworkUtil {
     /**
      * 判断一个给定的URL是否能够连通；通过Socket ping实现；
@@ -48,5 +50,26 @@ public class NetworkUtil {
     public static boolean isLocalPortUsed(int port) {
         String localhost = NetworkInterfaceManager.INSTANCE.getLocalHostAddress();
         return isServerUp(localhost, port);
+    }
+
+
+    /**
+     * 为@param module选一个可用的端口号；
+     *
+     * @param initialPort 初始端口号
+     * @param module      模块名称，用作日志
+     * @return
+     */
+    public static int pickAvailablePort(int initialPort, String module) {
+        for (int i = 0; i < 20; i++) {
+            if (NetworkUtil.isLocalPortUsed(initialPort)) {
+                log.warn(String.format("*******\n*******\n*******\n%s port has been used:%d", module, initialPort));
+                log.warn(String.format("Will try to use new port:%d for module:%s", ++initialPort, module));
+                continue;
+            }
+        }
+
+        //不能保证20次尝试后仍然可能找到可用的端口；此时应用应该抛出异常
+        return initialPort;
     }
 }

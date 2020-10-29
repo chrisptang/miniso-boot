@@ -14,6 +14,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.util.StringUtils;
 
+import static com.leqee.boot.autoconfiguration.NetworkUtil.pickAvailablePort;
+
 @Configuration
 @PropertySource(value = {"classpath:leqee-xxl-job.properties"})
 @ConditionalOnClass(name = {"com.leqee.boot.autoconfiguration.xxljob.annotation.EnableXxlJob"})
@@ -48,7 +50,9 @@ public class LeqeeBootXxlJobAutoConfiguration {
             xxlJobSpringExecutor.setAdminAddresses(xxlJobConfig.getAdminAddresses());
         }
         xxlJobSpringExecutor.setLogRetentionDays(xxlJobConfig.getLogRetentionDays());
-        xxlJobSpringExecutor.setPort(xxlJobConfig.getPort());
+
+        int xxlPortToUse = pickAvailablePort(xxlJobConfig.getPort(), "XXL-JOB");
+        xxlJobSpringExecutor.setPort(xxlPortToUse);
         xxlJobSpringExecutor.setAccessToken(xxlJobConfig.getAccessToken());
 
         // Log path, default to be /home/user-name/logs/application-name/xxl-job/

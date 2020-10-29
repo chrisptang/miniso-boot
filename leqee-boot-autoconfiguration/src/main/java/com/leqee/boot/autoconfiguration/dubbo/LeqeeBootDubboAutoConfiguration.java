@@ -1,6 +1,5 @@
 package com.leqee.boot.autoconfiguration.dubbo;
 
-import com.leqee.boot.autoconfiguration.NetworkUtil;
 import com.leqee.boot.autoconfiguration.common.EnvUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.*;
@@ -15,6 +14,8 @@ import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.leqee.boot.autoconfiguration.NetworkUtil.pickAvailablePort;
 
 @Configuration
 @ConditionalOnClass(
@@ -103,18 +104,10 @@ public class LeqeeBootDubboAutoConfiguration {
     @ConfigurationProperties(prefix = "dubbo.protocol")
     public ProtocolConfig protocolConfig() {
         ProtocolConfig protocolConfig = new ProtocolConfig();
-        int dubboPortToUse = dubboPort;
-        for (int i = 0; i < 20; i++) {
-            if (NetworkUtil.isLocalPortUsed(dubboPortToUse)) {
-                log.warn("*******\n*******\n*******\nDubbo port has been used:" + dubboPortToUse);
-                log.warn("Will try to use new dubbo port:" + (++dubboPortToUse));
-                continue;
-            } else {
-                protocolConfig.setPort(dubboPortToUse);
-                System.setProperty("dubbo.protocol.port", dubboPortToUse + "");
-                break;
-            }
-        }
+
+        int dubboPortToUse = pickAvailablePort(dubboPort, "Dubbo");
+        protocolConfig.setPort(dubboPortToUse);
+        System.setProperty("dubbo.protocol.port", dubboPortToUse + "");
 
         return protocolConfig;
     }
