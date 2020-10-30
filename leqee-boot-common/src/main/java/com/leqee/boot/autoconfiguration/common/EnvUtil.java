@@ -39,6 +39,6 @@ public class EnvUtil {
             System.setProperty("env", env);
         }
 
-        return currentEnv = env;
+        return currentEnv = env.toLowerCase();
     }
 }
