@@ -11,10 +11,6 @@
 
     <artifactId>leqee-boot-autoconfiguration</artifactId>
 
-    <properties>
-        <dubbo.version>2.7.8</dubbo.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>com.leqee.boot</groupId>

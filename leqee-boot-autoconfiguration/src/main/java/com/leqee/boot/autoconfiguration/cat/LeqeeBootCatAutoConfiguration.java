@@ -13,7 +13,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -29,7 +29,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Configuration
-@ConditionalOnClass(name = {"com.leqee.boot.autoconfiguration.annotation.EnableCat"})
+@ConditionalOnBean({CatBeanImportRegistrar.EnableCatChecker.class})
 @PropertySource("classpath:leqee-cat.properties")
 @ConfigurationProperties(prefix = "leqee-boot.cat")
 public class LeqeeBootCatAutoConfiguration implements InitializingBean, ApplicationContextAware {

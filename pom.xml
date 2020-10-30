@@ -19,6 +19,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <leqee-boot-infra.version>1.0.0-SNAPSHOT</leqee-boot-infra.version>
+        <dubbo.version>2.7.8</dubbo.version>
     </properties>
 
     <modules>
@@ -27,6 +28,7 @@
         <module>leqee-boot-xxl-job-autoconfiguration</module>
         <module>leqee-boot-common</module>
         <module>leqee-boot-apollo-autoconfiguration</module>
+        <module>leqee-boot-dubbo-mockito</module>
     </modules>
 
     <dependencyManagement>

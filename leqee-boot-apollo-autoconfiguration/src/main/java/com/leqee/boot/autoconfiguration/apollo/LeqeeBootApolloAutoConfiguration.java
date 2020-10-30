@@ -7,6 +7,7 @@ import com.leqee.boot.autoconfiguration.common.EnvUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.SmartInitializingSingleton;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.HashMap;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
  * 自动装配Apollo的远程配置；不同的环境不同的server地址；
  */
 @Configuration
+@ConditionalOnBean({ApolloBeanImportRegistrar.EnableApolloChecker.class})
 @EnableApolloConfig({ConfigConsts.NAMESPACE_APPLICATION, "leqee-ad.ad-common-config"})
 public class LeqeeBootApolloAutoConfiguration implements SmartInitializingSingleton {
     private static final Logger logger = LoggerFactory.getLogger(LeqeeBootApolloAutoConfiguration.class);

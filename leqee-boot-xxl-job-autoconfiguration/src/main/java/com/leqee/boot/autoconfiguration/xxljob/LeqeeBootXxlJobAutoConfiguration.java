@@ -1,12 +1,13 @@
 package com.leqee.boot.autoconfiguration.xxljob;
 
 import com.leqee.boot.autoconfiguration.common.LogPathUtil;
+import com.leqee.boot.autoconfiguration.xxljob.beanregistry.XxlJobBeanRegistrar;
 import com.xxl.job.core.executor.impl.XxlJobSpringExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -18,7 +19,7 @@ import static com.leqee.boot.autoconfiguration.NetworkUtil.pickAvailablePort;
 
 @Configuration
 @PropertySource(value = {"classpath:leqee-xxl-job.properties"})
-@ConditionalOnClass(name = {"com.leqee.boot.autoconfiguration.xxljob.annotation.EnableXxlJob"})
+@ConditionalOnBean({XxlJobBeanRegistrar.EnableXxlJobChecker.class})
 public class LeqeeBootXxlJobAutoConfiguration {
 
     private static final Logger logger = LoggerFactory.getLogger(LeqeeBootXxlJobAutoConfiguration.class);
