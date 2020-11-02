@@ -44,7 +44,7 @@ public class LeqeeBootCatAutoConfiguration implements InitializingBean, Applicat
         CAT_SERVER_LIST.put("dev", "172.22.15.41");
         CAT_SERVER_LIST.put("fat", "10.0.16.134");
         CAT_SERVER_LIST.put("local", "127.0.0.1");
-        CAT_SERVER_LIST.put("prod", "10.0.16.134");
+        CAT_SERVER_LIST.put("prod", "10.0.16.140");
     }
 
     @Value("${leqee.ad.common.cat.port:2280}")

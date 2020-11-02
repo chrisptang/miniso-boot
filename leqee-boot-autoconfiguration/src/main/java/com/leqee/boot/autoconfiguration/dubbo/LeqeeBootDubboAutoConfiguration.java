@@ -33,7 +33,7 @@ public class LeqeeBootDubboAutoConfiguration {
         DUBBO_REGISTRY_URLS.put("local", "zookeeper://localhost:2181");
         DUBBO_REGISTRY_URLS.put("dev", "zookeeper://172.22.15.41:2181");
         DUBBO_REGISTRY_URLS.put("fat", "zookeeper://10.0.16.134:2181");
-        DUBBO_REGISTRY_URLS.put("prod", "zookeeper://10.0.16.134:2181");
+        DUBBO_REGISTRY_URLS.put("prod", "zookeeper://10.0.16.140:2181");
     }
 
     @Value("${spring.application.name}")

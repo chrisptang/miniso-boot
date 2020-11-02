@@ -29,8 +29,8 @@ public class LeqeeBootApolloAutoConfiguration implements SmartInitializingSingle
     static {
         APOLLO_CONFIGURATION_SERVER.put("dev", "http://172.22.15.41:30004");
         APOLLO_CONFIGURATION_SERVER.put("local", "http://127.0.0.1:30004");
-        APOLLO_CONFIGURATION_SERVER.put("fat", "http://47.92.192.33:30004");
-        APOLLO_CONFIGURATION_SERVER.put("prod", "http://10.0.16.134:30004");
+        APOLLO_CONFIGURATION_SERVER.put("fat", "http://10.0.16.134:30004");
+        APOLLO_CONFIGURATION_SERVER.put("prod", "http://10.0.16.140:30004");
 
         String env = EnvUtil.getEnv();
         if (!APOLLO_CONFIGURATION_SERVER.containsKey(env)) {
