@@ -20,7 +20,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <leqee-boot-infra.version>1.0.0-SNAPSHOT</leqee-boot-infra.version>
         <dubbo.version>2.7.8</dubbo.version>
-        <leqee-boot-version>1.0.1-RELEASE</leqee-boot-version>
+        <leqee-boot-version>1.0.2-RELEASE</leqee-boot-version>
     </properties>
 
     <modules>
@@ -48,7 +48,7 @@
             <dependency>
                 <groupId>com.leqee.boot</groupId>
                 <artifactId>leqee-boot-client</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
+                <version>${leqee-boot-version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

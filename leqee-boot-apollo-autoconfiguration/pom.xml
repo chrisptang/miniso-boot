@@ -31,7 +31,7 @@
         <dependency>
             <groupId>com.leqee.boot</groupId>
             <artifactId>leqee-boot-common</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>${leqee-boot-version}</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
