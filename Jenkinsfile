@@ -7,11 +7,28 @@ pipeline {
     options {
         skipStagesAfterUnstable()
     }
+    parameters {
+        choice(name: 'DEPLOY_TO', choices: ['YES', 'Build-Only']
+            , description: '是否发布到maven仓库：YES：发布jar包，Build Only：只编译代码；')
+    }
     stages {
         stage('Build') {
+            when {
+                branch 'master'
+                expression { params.DEPLOY_TO == 'YES' }
+            }
             steps {
                 echo 'Build jar and upload them onto maven repo..'
                 sh 'mvn deploy -Dmaven.test.skip -U'
+            }
+        }
+        stage('Compile') {
+            when {
+                expression { params.DEPLOY_TO != 'YES' }
+            }
+            steps {
+                echo 'Compiling source code..'
+                sh 'mvn clean package -Dmaven.test.skip -U'
             }
         }
         stage('Prepare Post Actions'){
