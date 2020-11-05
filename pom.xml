@@ -11,16 +11,15 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.leqee.boot</groupId>
     <artifactId>leqee-boot-infra</artifactId>
-    <version>${leqee-boot-version}</version>
+    <version>1.0.3-RELEASE</version>
     <packaging>pom</packaging>
 
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <leqee-boot-infra.version>1.0.0-SNAPSHOT</leqee-boot-infra.version>
         <dubbo.version>2.7.8</dubbo.version>
-        <leqee-boot-version>1.0.2-RELEASE</leqee-boot-version>
+        <leqee-boot-version>1.0.3-RELEASE</leqee-boot-version>
     </properties>
 
     <modules>

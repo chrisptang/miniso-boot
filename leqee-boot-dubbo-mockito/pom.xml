@@ -5,8 +5,7 @@
     <parent>
         <artifactId>leqee-boot-infra</artifactId>
         <groupId>com.leqee.boot</groupId>
-        <version>${leqee-boot-version}</version>
-        <relativePath>../pom.xml</relativePath>
+        <version>1.0.3-RELEASE</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <description>用于测试用例中，mock远程DubboReference服务</description>
