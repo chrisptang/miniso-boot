@@ -5,7 +5,7 @@
     <parent>
         <artifactId>leqee-boot-infra</artifactId>
         <groupId>com.leqee.boot</groupId>
-        <version>1.0.3-RELEASE</version>
+        <version>1.0.4-RELEASE</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -30,7 +30,7 @@
         <dependency>
             <groupId>com.leqee.boot</groupId>
             <artifactId>leqee-boot-common</artifactId>
-            <version>${leqee-boot-version}</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
