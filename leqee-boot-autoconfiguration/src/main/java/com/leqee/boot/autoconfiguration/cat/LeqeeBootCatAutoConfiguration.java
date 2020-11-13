@@ -56,7 +56,7 @@ public class LeqeeBootCatAutoConfiguration implements InitializingBean, Applicat
     @Value("${spring.application.name:unknown}")
     private String applicationName;
 
-    @Value("${leqee.ad.common.cat.servers:172.22.15.41}")
+    @Value("${leqee.ad.common.cat.servers}")
     private String[] servers;
 
     @Bean
