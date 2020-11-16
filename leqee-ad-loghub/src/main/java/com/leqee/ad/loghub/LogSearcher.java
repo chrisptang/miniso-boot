@@ -29,4 +29,14 @@ public interface LogSearcher {
      * @return
      */
     <T extends Serializable> Collection<T> search(String query, String topic, LogSearchPaging paging, Class<T> tClass);
+
+    /**
+     * 根据query来进行count操作；
+     * 注意query不能包含'|'，否则会抛出异常；
+     *
+     * @param query
+     * @param topic
+     * @return
+     */
+    int searchAndCount(String query, String topic, LogSearchPaging paging);
 }

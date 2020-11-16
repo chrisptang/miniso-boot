@@ -45,6 +45,12 @@ public class LogHubAgent implements InitializingBean, DisposableBean, LogSearche
 
     @Override
     public <T extends Serializable> Collection<T> search(String query, String topic, LogSearchPaging paging, Class<T> tClass) {
+        if (null == topic) {
+            topic = "";
+        }
+        if (null == paging) {
+            paging = LogSearchPaging.defaultPaging();
+        }
         try {
             GetLogsRequest request = new GetLogsRequest(
                     logHubConfig.getProject()
@@ -59,8 +65,49 @@ public class LogHubAgent implements InitializingBean, DisposableBean, LogSearche
                 return JSON.parseObject(queriedLog.GetLogItem().ToJsonString(), tClass);
             }).collect(Collectors.toList());
         } catch (LogException e) {
-            throw new RuntimeException("Unable to search log:", e);
+            throw new RuntimeException("Unable to search log:" + query, e);
         }
+    }
+
+    @Override
+    public int searchAndCount(String query, String topic, LogSearchPaging paging) {
+        if (null == topic) {
+            topic = "";
+        }
+        if (null == paging) {
+            paging = LogSearchPaging.defaultPaging();
+        }
+        if (query == null || query.trim().length() <= 0) {
+            throw new IllegalArgumentException("param query is empty:" + query);
+        }
+        if (query.contains("|")) {
+            throw new IllegalArgumentException("param query should not contains '|':\t" + query);
+        }
+        query += "|select count(*) as cnt";
+
+        try {
+            GetLogsRequest request = new GetLogsRequest(
+                    logHubConfig.getProject()
+                    , logHubConfig.getLogStore()
+                    , paging.getFrom()
+                    , paging.getTo(), topic, query
+                    , paging.getOffset(), paging.getPageSize(), paging.isEarliestFirst());
+            GetLogsResponse response = LOG_HUB_CLIENT.get().GetLogs(request);
+            log.info(JSON.toJSONString(response.GetAllHeaders()));
+            ArrayList<QueriedLog> logs = response.GetLogs();
+            if (CollectionUtils.isEmpty(logs)) {
+                log.warn("query returned empty result:" + query);
+                return 0;
+            }
+            JSONObject countLog = JSON.parseObject(logs.get(0).GetLogItem().ToJsonString());
+            if (countLog.containsKey("cnt")) {
+                return countLog.getIntValue("cnt");
+            }
+        } catch (LogException e) {
+            throw new RuntimeException("Unable to search-and-count log:" + query, e);
+        }
+
+        return 0;
     }
 
     @Override
