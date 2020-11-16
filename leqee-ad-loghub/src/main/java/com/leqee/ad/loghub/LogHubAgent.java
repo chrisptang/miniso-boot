@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.aliyun.openservices.aliyun.log.producer.LogProducer;
 import com.aliyun.openservices.aliyun.log.producer.Producer;
 import com.aliyun.openservices.aliyun.log.producer.ProducerConfig;
+import com.aliyun.openservices.aliyun.log.producer.ProjectConfig;
 import com.aliyun.openservices.log.Client;
 import com.aliyun.openservices.log.common.LogItem;
 import com.aliyun.openservices.log.common.QueriedLog;
@@ -16,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.CollectionUtils;
 
@@ -33,34 +33,24 @@ public class LogHubAgent implements InitializingBean, DisposableBean, LogSearche
     @Autowired
     private LogHubConfig logHubConfig;
 
-    @Bean
-    public LogSearcher logSearcher() {
-        return this;
-    }
-
-    @Bean
-    public LogStorage logStorage() {
-        return this;
-    }
-
     @Override
     public <T extends Serializable> Collection<T> search(String query, Class<T> tClass) {
-        LogSearchPaging paging = new LogSearchPaging();
-        paging.setFrom((int) (System.currentTimeMillis() / 1000 - 3600 * 48));
-        paging.setOffset(0);
-        paging.setPageSize(100);
-        paging.setTo((int) (System.currentTimeMillis() / 1000));
-        return search(query, paging, tClass);
+        return search(query, LogSearchPaging.defaultPaging(), tClass);
     }
 
     @Override
     public <T extends Serializable> Collection<T> search(String query, LogSearchPaging paging, Class<T> tClass) {
+        return search(query, "", paging, tClass);
+    }
+
+    @Override
+    public <T extends Serializable> Collection<T> search(String query, String topic, LogSearchPaging paging, Class<T> tClass) {
         try {
             GetLogsRequest request = new GetLogsRequest(
                     logHubConfig.getProject()
                     , logHubConfig.getLogStore()
                     , paging.getFrom()
-                    , paging.getTo(), "", query
+                    , paging.getTo(), topic, query
                     , paging.getOffset(), paging.getPageSize(), paging.isEarliestFirst());
             GetLogsResponse response = LOG_HUB_CLIENT.get().GetLogs(request);
             log.info(JSON.toJSONString(response.GetAllHeaders()));
@@ -75,12 +65,27 @@ public class LogHubAgent implements InitializingBean, DisposableBean, LogSearche
 
     @Override
     public void log(Collection<? extends Serializable> logEntities) {
+        log("", logEntities);
+    }
+
+    @Override
+    public void log(String topic, Collection<? extends Serializable> logEntities) {
         if (CollectionUtils.isEmpty(logEntities)) {
             return;
         }
         try {
             MESSAGE_PRODUCER.get().send(logHubConfig.getProject(), logHubConfig.getLogStore()
-                    , logEntities.stream().map(LogHubAgent::buildLogItem).collect(Collectors.toList()));
+                    , topic, "", logEntities.stream().map(LogHubAgent::buildLogItem).collect(Collectors.toList())
+                    , result -> {
+                        if (result == null) {
+                            return;
+                        }
+                        if (result.isSuccessful()) {
+                            log.info("LogHub success:" + result.toString());
+                        } else {
+                            log.warn("LogHub failed:" + result.toString());
+                        }
+                    });
         } catch (Exception e) {
             throw new RuntimeException("Unable to log:", e);
         }
@@ -102,7 +107,14 @@ public class LogHubAgent implements InitializingBean, DisposableBean, LogSearche
         ProducerConfig producerConfig = new ProducerConfig();
         producerConfig.setRetries(3);
         producerConfig.setMaxRetryBackoffMs(100L);
-        Producer producer = new LogProducer(producerConfig);
+        LogProducer producer = new LogProducer(producerConfig);
+        ProjectConfig projectConfig = new ProjectConfig(
+                logHubConfig.getProject()
+                , logHubConfig.getEndPoint()
+                , logHubConfig.getAccessKey()
+                , logHubConfig.getAccessSecret());
+        producer.putProjectConfig(projectConfig);
+
         MESSAGE_PRODUCER.compareAndSet(null, producer);
 
         Client client = new Client(logHubConfig.getEndPoint(), logHubConfig.getAccessKey(), logHubConfig.getAccessSecret());

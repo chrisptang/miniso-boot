@@ -14,4 +14,6 @@ public interface LogStorage {
      * @param logEntities
      */
     void log(Collection<? extends Serializable> logEntities);
+
+    void log(String topic, Collection<? extends Serializable> logEntities);
 }

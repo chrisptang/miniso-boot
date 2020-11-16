@@ -34,7 +34,7 @@ public class LogSearchPaging {
     private boolean earliestFirst;
 
     public LogSearchPaging() {
-        final int currentTimeInSecond = (int) System.currentTimeMillis() / 1000;
+        final int currentTimeInSecond = (int) (System.currentTimeMillis() / 1000);
         this.setPageSize(20)
                 .setOffset(0)
                 .setEarliestFirst(false)
@@ -43,13 +43,6 @@ public class LogSearchPaging {
     }
 
     public static LogSearchPaging defaultPaging() {
-        final int currentTimeInSecond = (int) System.currentTimeMillis() / 1000;
-        return new LogSearchPaging()
-                .setPageSize(20)
-                .setOffset(0)
-                .setEarliestFirst(false)
-                //默认取2天以内的数据；
-                .setFrom(currentTimeInSecond - 2 * 3600 * 24)
-                .setTo(currentTimeInSecond);
+        return new LogSearchPaging();
     }
 }
