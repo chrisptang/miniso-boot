@@ -7,12 +7,12 @@ public class EnvUtil {
     private static volatile String currentEnv;
 
     /**
-     * 获取当前应用的所属环境：local/dev/fat/pro，分别对应：本地环境/开发环境/集成测试环境/生产环境
+     * 获取当前应用的所属环境：local/dev/fat/prod，分别对应：本地环境/开发环境/集成测试环境/生产环境
      * <p>
      * 获取env参数的优先级（从高到低）：
-     * 1、JVM启动参数，-Denv=local/dev/fat/pro；
+     * 1、JVM启动参数，-Denv=local/dev/fat/prod；
      * 2、Linux系统环境变量，ENV；
-     * 3、JVM 启动参数 -Dleqee-boot.env=local/dev/fat/pro；
+     * 3、JVM 启动参数 -Dleqee-boot.env=local/dev/fat/prod；
      * 4、默认：dev；
      *
      * @return

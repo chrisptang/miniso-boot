@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.leqee.boot</groupId>
     <artifactId>leqee-boot-infra</artifactId>
-    <version>1.0.7-RELEASE</version>
+    <version>1.0.8-RELEASE</version>
     <packaging>pom</packaging>
 
     <properties>
@@ -18,7 +18,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <dubbo.version>2.7.8</dubbo.version>
-        <leqee-boot-version>1.0.7-RELEASE</leqee-boot-version>
+        <leqee-boot-version>1.0.8-RELEASE</leqee-boot-version>
     </properties>
 
     <modules>
@@ -28,6 +28,7 @@
         <module>leqee-boot-common</module>
         <module>leqee-boot-apollo-autoconfiguration</module>
         <module>leqee-boot-dubbo-mockito</module>
+        <module>leqee-ad-loghub</module>
     </modules>
 
     <dependencyManagement>
@@ -71,6 +72,11 @@
             <dependency>
                 <groupId>com.leqee.boot</groupId>
                 <artifactId>leqee-boot-client</artifactId>
+                <version>${leqee-boot-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.leqee.boot</groupId>
+                <artifactId>leqee-ad-loghub</artifactId>
                 <version>${leqee-boot-version}</version>
             </dependency>
         </dependencies>
