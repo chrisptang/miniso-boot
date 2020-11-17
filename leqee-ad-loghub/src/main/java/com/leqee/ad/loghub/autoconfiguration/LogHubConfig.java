@@ -12,5 +12,5 @@ public class LogHubConfig {
 
     private String accessSecret;
 
-    private String logStore;
+    private String logStorage;
 }

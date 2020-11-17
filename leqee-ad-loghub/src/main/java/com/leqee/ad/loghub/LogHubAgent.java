@@ -54,7 +54,7 @@ public class LogHubAgent implements InitializingBean, DisposableBean, LogSearche
         try {
             GetLogsRequest request = new GetLogsRequest(
                     logHubConfig.getProject()
-                    , logHubConfig.getLogStore()
+                    , logHubConfig.getLogStorage()
                     , paging.getFrom()
                     , paging.getTo(), topic, query
                     , paging.getOffset(), paging.getPageSize(), paging.isEarliestFirst());
@@ -88,7 +88,7 @@ public class LogHubAgent implements InitializingBean, DisposableBean, LogSearche
         try {
             GetLogsRequest request = new GetLogsRequest(
                     logHubConfig.getProject()
-                    , logHubConfig.getLogStore()
+                    , logHubConfig.getLogStorage()
                     , paging.getFrom()
                     , paging.getTo(), topic, query
                     , paging.getOffset(), paging.getPageSize(), paging.isEarliestFirst());
@@ -121,7 +121,7 @@ public class LogHubAgent implements InitializingBean, DisposableBean, LogSearche
             return;
         }
         try {
-            MESSAGE_PRODUCER.get().send(logHubConfig.getProject(), logHubConfig.getLogStore()
+            MESSAGE_PRODUCER.get().send(logHubConfig.getProject(), logHubConfig.getLogStorage()
                     , topic, "", logEntities.stream().map(LogHubAgent::buildLogItem).collect(Collectors.toList())
                     , result -> {
                         if (result == null) {

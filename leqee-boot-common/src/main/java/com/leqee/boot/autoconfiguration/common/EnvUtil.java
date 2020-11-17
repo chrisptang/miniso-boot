@@ -2,7 +2,7 @@ package com.leqee.boot.autoconfiguration.common;
 
 public class EnvUtil {
 
-    private static final String DEFAULT_ENV = "dev";
+    private static final String DEFAULT_ENV = SupportedEnv.Dev.getName();
 
     private static volatile String currentEnv;
 
@@ -40,5 +40,10 @@ public class EnvUtil {
         }
 
         return currentEnv = env.toLowerCase();
+    }
+
+    public static SupportedEnv getSupportedEnv() {
+        String env = getEnv();
+        return SupportedEnv.getByName(env);
     }
 }
