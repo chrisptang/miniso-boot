@@ -1,6 +1,5 @@
 package com.leqee.boot.autoconfiguration;
 
-import com.dianping.cat.Cat;
 import com.dianping.cat.configuration.NetworkInterfaceManager;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,7 +23,7 @@ public class NetworkUtil {
 
             return true;
         } catch (Exception e) {
-            Cat.logError("Unable to open socket toward:" + address, e);
+            log.warn("Unable to open socket toward:" + address);
         }
 
         return false;
