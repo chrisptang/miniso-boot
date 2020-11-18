@@ -65,6 +65,8 @@ public class NetworkUtil {
                 log.warn(String.format("*******\n*******\n*******\n%s port has been used:%d", module, initialPort));
                 log.warn(String.format("Will try to use new port:%d for module:%s", ++initialPort, module));
                 continue;
+            } else {
+                return initialPort;
             }
         }
 
