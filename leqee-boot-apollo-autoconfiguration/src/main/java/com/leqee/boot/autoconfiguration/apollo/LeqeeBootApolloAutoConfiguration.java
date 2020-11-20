@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,18 +30,22 @@ public class LeqeeBootApolloAutoConfiguration implements SmartInitializingSingle
     static {
         APOLLO_CONFIGURATION_SERVER.put("dev", "http://172.22.15.41:30004");
         APOLLO_CONFIGURATION_SERVER.put("local", "http://127.0.0.1:30004");
+
+        //Test and FAT are the same env.
         APOLLO_CONFIGURATION_SERVER.put("fat", "http://10.0.16.134:30004");
+        APOLLO_CONFIGURATION_SERVER.put("test", "http://10.0.16.134:30004");
+
         APOLLO_CONFIGURATION_SERVER.put("prod", "http://10.0.16.140:30004");
 
-        String env = EnvUtil.getEnv();
-        if (!APOLLO_CONFIGURATION_SERVER.containsKey(env)) {
-            //fullback to dev;
-            env = "dev";
+        String configServer = System.getProperty("leqee.apollo.server", "");
+        if (StringUtils.isEmpty(configServer)) {
+            configServer = APOLLO_CONFIGURATION_SERVER.get(EnvUtil.getEnv());
         }
 
-        System.setProperty("apollo.configService", APOLLO_CONFIGURATION_SERVER.get(env));
-        System.setProperty("apollo.meta", APOLLO_CONFIGURATION_SERVER.get(env));
+        System.setProperty("apollo.configService", configServer);
+        System.setProperty("apollo.meta", configServer);
         System.setProperty("apollo.bootstrap.eagerLoad.enabled", "true");
+        System.setProperty("app.id", System.getProperty("spring.application.name", "--please-set_spring.application.name_property--"));
     }
 
     @Override
