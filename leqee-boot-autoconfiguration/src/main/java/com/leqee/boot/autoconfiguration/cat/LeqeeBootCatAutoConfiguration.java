@@ -6,6 +6,7 @@ import com.dianping.cat.log.CatLogger;
 import com.dianping.cat.servlet.CatFilter;
 import com.leqee.boot.autoconfiguration.common.EnvUtil;
 import com.leqee.boot.autoconfiguration.common.LogPathUtil;
+import com.wanda.cat.sample.plugins.CatMybatisPlugin;
 import net.dubboclub.catmonitor.DubboCat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.ApplicationContext;
@@ -104,6 +106,12 @@ public class LeqeeBootCatAutoConfiguration implements InitializingBean, Applicat
         return registration;
     }
 
+    @Bean(name = "catMybatisPlugin")
+    @ConditionalOnProperty("spring.datasource.url")
+    public CatMybatisPlugin catMybatisPlugin() {
+        return new CatMybatisPlugin();
+    }
+
     private String[] getCatServers() {
         String serverList = DEFAULT_CAT_SERVER;
         String env = EnvUtil.getEnv();
@@ -111,6 +119,7 @@ public class LeqeeBootCatAutoConfiguration implements InitializingBean, Applicat
                 && !StringUtils.isEmpty(CAT_SERVER_LIST.get(env))) {
             serverList = CAT_SERVER_LIST.get(env);
         }
+        logger.warn("\n\n\n=====\tCAT has been configured as:" + serverList);
         return serverList.split(",");
     }
 
