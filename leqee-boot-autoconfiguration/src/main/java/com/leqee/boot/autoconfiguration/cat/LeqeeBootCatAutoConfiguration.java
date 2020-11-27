@@ -15,6 +15,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -106,10 +107,14 @@ public class LeqeeBootCatAutoConfiguration implements InitializingBean, Applicat
         return registration;
     }
 
-    @Bean(name = "catMybatisPlugin")
+    @Configuration
+    @ConditionalOnClass(name = "org.apache.ibatis.plugin.Interceptor")
     @ConditionalOnProperty("spring.datasource.url")
-    public CatMybatisPlugin catMybatisPlugin() {
-        return new CatMybatisPlugin();
+    static class CatMybatisIntegrationAutoConfiguration {
+        @Bean(name = "catMybatisPlugin")
+        public CatMybatisPlugin catMybatisPlugin() {
+            return new CatMybatisPlugin();
+        }
     }
 
     private String[] getCatServers() {
