@@ -33,7 +33,12 @@ public class LeqeeBootDubboAutoConfiguration {
         DUBBO_REGISTRY_URLS.put("local", "zookeeper://localhost:2181");
         DUBBO_REGISTRY_URLS.put("dev", "zookeeper://172.22.15.41:2181");
         DUBBO_REGISTRY_URLS.put("fat", "zookeeper://10.0.16.134:2181");
-        DUBBO_REGISTRY_URLS.put("prod", "zookeeper://10.0.16.140:2181");
+        DUBBO_REGISTRY_URLS.put("prod", "zookeeper://10.0.16.140:2181,zookeeper://10.0.16.131:2181,zookeeper://10.0.16.138:2181");
+        /*
+         * server.1=10.0.16.140:2888:3888;2181
+         * server.2=10.0.16.131:2888:3888;2181
+         * server.3=10.0.16.138:2888:3888;2181
+         * */
     }
 
     @Value("${spring.application.name}")
@@ -64,8 +69,9 @@ public class LeqeeBootDubboAutoConfiguration {
         if (StringUtils.isEmpty(dubboRegistryAddress)) {
             //set dubbo registry center address
             if (DUBBO_REGISTRY_URLS.containsKey(env)) {
-                registryConfig.setAddress(DUBBO_REGISTRY_URLS.get(env));
+                registryConfig.setAddress(RegistrySelector.selectPremierRegistryAddress(DUBBO_REGISTRY_URLS.get(env)));
             } else {
+                log.warn("\n\n===============\nUsing Default Zookeeper URL:" + DEFAULT_ZOOKEEPER_URL);
                 registryConfig.setAddress(DEFAULT_ZOOKEEPER_URL);
             }
         } else {
