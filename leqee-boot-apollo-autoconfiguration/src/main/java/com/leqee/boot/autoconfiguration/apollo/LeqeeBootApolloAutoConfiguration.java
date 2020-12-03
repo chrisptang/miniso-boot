@@ -45,7 +45,6 @@ public class LeqeeBootApolloAutoConfiguration implements SmartInitializingSingle
         System.setProperty("apollo.configService", configServer);
         System.setProperty("apollo.meta", configServer);
         System.setProperty("apollo.bootstrap.eagerLoad.enabled", "true");
-        System.setProperty("app.id", System.getProperty("spring.application.name", "--please-set_spring.application.name_property--"));
     }
 
     @Override
