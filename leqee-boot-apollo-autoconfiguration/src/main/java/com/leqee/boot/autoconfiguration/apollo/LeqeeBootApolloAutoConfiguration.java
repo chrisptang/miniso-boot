@@ -3,6 +3,7 @@ package com.leqee.boot.autoconfiguration.apollo;
 import com.ctrip.framework.apollo.ConfigService;
 import com.ctrip.framework.apollo.core.ConfigConsts;
 import com.ctrip.framework.apollo.spring.annotation.EnableApolloConfig;
+import com.leqee.boot.autoconfiguration.common.DefaultConstants;
 import com.leqee.boot.autoconfiguration.common.EnvUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +29,7 @@ public class LeqeeBootApolloAutoConfiguration implements SmartInitializingSingle
     private static final Map<String, String> APOLLO_CONFIGURATION_SERVER = new HashMap<>();
 
     static {
-        APOLLO_CONFIGURATION_SERVER.put("dev", "http://172.20.14.24:30004");
+        APOLLO_CONFIGURATION_SERVER.put("dev", String.format("http://%s:30004", DefaultConstants.DEV_HOST));
         APOLLO_CONFIGURATION_SERVER.put("local", "http://127.0.0.1:30004");
 
         //Test and FAT are the same env.

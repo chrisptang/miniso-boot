@@ -31,6 +31,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static com.leqee.boot.autoconfiguration.common.DefaultConstants.DEV_HOST;
+
 @Configuration
 @ConditionalOnBean({CatBeanImportRegistrar.EnableCatChecker.class})
 @PropertySource("classpath:leqee-cat.properties")
@@ -41,10 +43,10 @@ public class LeqeeBootCatAutoConfiguration implements InitializingBean, Applicat
 
     private static final Map<String, String> CAT_SERVER_LIST = new HashMap<>();
 
-    private static final String DEFAULT_CAT_SERVER = "172.22.15.41";
+    private static final String DEFAULT_CAT_SERVER = DEV_HOST;
 
     static {
-        CAT_SERVER_LIST.put("dev", "172.22.15.41");
+        CAT_SERVER_LIST.put("dev", DEV_HOST);
         CAT_SERVER_LIST.put("fat", "10.0.16.134");
         CAT_SERVER_LIST.put("local", "127.0.0.1");
         CAT_SERVER_LIST.put("prod", "10.0.16.140");

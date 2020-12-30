@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.leqee.boot.autoconfiguration.NetworkUtil.pickAvailablePort;
+import static com.leqee.boot.autoconfiguration.common.DefaultConstants.DEV_HOST;
 
 @Configuration
 @ConditionalOnBean(CatBeanImportRegistrar.EnableCatChecker.class)
@@ -34,7 +35,7 @@ public class LeqeeBootDubboAutoConfiguration {
 
     static {
         DUBBO_REGISTRY_URLS.put("local", "zookeeper://localhost:2181");
-        DUBBO_REGISTRY_URLS.put("dev", "zookeeper://172.22.15.41:2181");
+        DUBBO_REGISTRY_URLS.put("dev", String.format("zookeeper://%s:2181", DEV_HOST));
         DUBBO_REGISTRY_URLS.put("fat", "zookeeper://10.0.16.134:2181");
         DUBBO_REGISTRY_URLS.put("prod", "zookeeper://10.0.16.140:2181,zookeeper://10.0.16.131:2181,zookeeper://10.0.16.138:2181");
         /*
