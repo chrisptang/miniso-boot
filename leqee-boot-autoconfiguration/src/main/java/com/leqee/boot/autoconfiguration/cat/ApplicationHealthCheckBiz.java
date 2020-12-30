@@ -2,14 +2,15 @@ package com.leqee.boot.autoconfiguration.cat;
 
 import com.dianping.cat.Cat;
 import com.leqee.boot.client.result.Result;
-import org.apache.dubbo.common.utils.NamedThreadFactory;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Collection;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ApplicationHealthCheckBiz implements Runnable {
 
@@ -20,7 +21,14 @@ public class ApplicationHealthCheckBiz implements Runnable {
     private static final AtomicBoolean IS_STARTED = new AtomicBoolean(false);
 
     private static final ScheduledExecutorService EXECUTOR_SERVICE = Executors.newScheduledThreadPool(1
-            , new NamedThreadFactory("application-health-check-"));
+            , new ThreadFactory() {
+                private final AtomicInteger threadIndex = new AtomicInteger(1);
+
+                @Override
+                public Thread newThread(Runnable r) {
+                    return new Thread("application-health-check-" + threadIndex.getAndIncrement());
+                }
+            });
 
     private Collection<HealthCheck> healthCheckList;
 

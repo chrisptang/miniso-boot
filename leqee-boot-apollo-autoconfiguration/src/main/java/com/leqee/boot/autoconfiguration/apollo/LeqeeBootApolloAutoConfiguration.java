@@ -28,7 +28,7 @@ public class LeqeeBootApolloAutoConfiguration implements SmartInitializingSingle
     private static final Map<String, String> APOLLO_CONFIGURATION_SERVER = new HashMap<>();
 
     static {
-        APOLLO_CONFIGURATION_SERVER.put("dev", "http://172.22.15.41:30004");
+        APOLLO_CONFIGURATION_SERVER.put("dev", "http://172.20.14.24:30004");
         APOLLO_CONFIGURATION_SERVER.put("local", "http://127.0.0.1:30004");
 
         //Test and FAT are the same env.

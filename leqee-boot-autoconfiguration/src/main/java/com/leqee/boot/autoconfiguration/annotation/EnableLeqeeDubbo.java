@@ -1,6 +1,8 @@
 package com.leqee.boot.autoconfiguration.annotation;
 
+import com.leqee.boot.autoconfiguration.dubbo.DubboBeanImportRegistrar;
 import org.apache.dubbo.config.spring.context.annotation.DubboComponentScan;
+import org.springframework.context.annotation.Import;
 import org.springframework.core.annotation.AliasFor;
 
 import java.lang.annotation.*;
@@ -10,6 +12,7 @@ import java.lang.annotation.*;
 @Inherited
 @Documented
 @DubboComponentScan
+@Import(DubboBeanImportRegistrar.class)
 public @interface EnableLeqeeDubbo {
 
     /**

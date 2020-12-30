@@ -1,9 +1,11 @@
 package com.leqee.boot.autoconfiguration.dubbo;
 
+import com.leqee.boot.autoconfiguration.cat.CatBeanImportRegistrar;
 import com.leqee.boot.autoconfiguration.common.EnvUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.*;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -18,8 +20,9 @@ import java.util.Map;
 import static com.leqee.boot.autoconfiguration.NetworkUtil.pickAvailablePort;
 
 @Configuration
+@ConditionalOnBean(CatBeanImportRegistrar.EnableCatChecker.class)
 @ConditionalOnClass(
-        name = {"com.leqee.boot.autoconfiguration.annotation.EnableLeqeeDubbo"}
+        name = {"org.apache.dubbo.config.RegistryConfig"}
 )
 @Slf4j
 @PropertySource("classpath:leqee-boot.properties")
