@@ -2,33 +2,25 @@ package com.leqee.boot.autoconfiguration.cat;
 
 import com.dianping.cat.Cat;
 import com.leqee.boot.client.result.Result;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Collection;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
+@Slf4j
 public class ApplicationHealthCheckBiz implements Runnable {
 
-    private int initialDelay = 60;
+    private int initialDelay = 10;
 
     private int period = 30;
 
     private static final AtomicBoolean IS_STARTED = new AtomicBoolean(false);
 
-    private static final ScheduledExecutorService EXECUTOR_SERVICE = Executors.newScheduledThreadPool(1
-            , new ThreadFactory() {
-                private final AtomicInteger threadIndex = new AtomicInteger(1);
-
-                @Override
-                public Thread newThread(Runnable r) {
-                    return new Thread("application-health-check-" + threadIndex.getAndIncrement());
-                }
-            });
+    private static final ScheduledExecutorService EXECUTOR_SERVICE = Executors.newScheduledThreadPool(1);
 
     private Collection<HealthCheck> healthCheckList;
 
@@ -56,6 +48,9 @@ public class ApplicationHealthCheckBiz implements Runnable {
 
     @Override
     public void run() {
+        if (log.isInfoEnabled()) {
+            log.info("Preparing HealthCheck...");
+        }
         if (CollectionUtils.isEmpty(healthCheckList)) {
             Cat.logEvent("HealthCheck", "No-HealthCheck-implementations", "failed", "");
             return;
