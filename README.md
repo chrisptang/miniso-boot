@@ -1,3 +1,3 @@
 # leqee-boot
 
-spring-boot starters for leqee
+spring-boot starters for miniso

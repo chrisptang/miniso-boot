@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.miniso.boot.autoconfiguration.dubbo.MinisoBootDubboAutoConfiguration,\
+com.miniso.boot.autoconfiguration.cat.MinisoBootCatAutoConfiguration

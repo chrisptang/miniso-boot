@@ -1,3 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.leqee.boot.autoconfiguration.dubbo.LeqeeBootDubboAutoConfiguration,\
-com.leqee.boot.autoconfiguration.cat.LeqeeBootCatAutoConfiguration

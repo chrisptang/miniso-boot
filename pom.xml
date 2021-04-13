@@ -8,9 +8,9 @@
         <version>2.3.4.RELEASE</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.leqee.boot</groupId>
-    <artifactId>leqee-boot-infra</artifactId>
-    <version>1.1.4-RELEASE</version>
+    <groupId>com.miniso.boot</groupId>
+    <artifactId>boot-infra</artifactId>
+    <version>1.2.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <properties>
@@ -18,17 +18,17 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <dubbo.version>2.7.8</dubbo.version>
-        <leqee-boot-version>1.1.4-RELEASE</leqee-boot-version>
+        <miniso-boot-version>1.2.0-SNAPSHOT</miniso-boot-version>
     </properties>
 
     <modules>
-        <module>leqee-boot-client</module>
-        <module>leqee-boot-autoconfiguration</module>
-        <module>leqee-boot-xxl-job-autoconfiguration</module>
-        <module>leqee-boot-common</module>
-        <module>leqee-boot-apollo-autoconfiguration</module>
-        <module>leqee-boot-dubbo-mockito</module>
-        <module>leqee-ad-loghub</module>
+        <module>miniso-boot-client</module>
+        <module>miniso-boot-autoconfiguration</module>
+        <module>miniso-boot-xxl-job-autoconfiguration</module>
+        <module>miniso-boot-common</module>
+        <module>miniso-boot-apollo-autoconfiguration</module>
+        <module>miniso-boot-dubbo-mockito</module>
+<!--        <module>miniso-boot-loghub</module>-->
     </modules>
 
     <dependencyManagement>
@@ -45,39 +45,39 @@
             </dependency>
 
             <dependency>
-                <groupId>com.leqee.boot</groupId>
-                <artifactId>leqee-boot-autoconfiguration</artifactId>
-                <version>${leqee-boot-version}</version>
+                <groupId>com.miniso.boot</groupId>
+                <artifactId>miniso-boot-autoconfiguration</artifactId>
+                <version>${miniso-boot-version}</version>
             </dependency>
             <dependency>
-                <groupId>com.leqee.boot</groupId>
-                <artifactId>leqee-boot-apollo-autoconfiguration</artifactId>
-                <version>${leqee-boot-version}</version>
+                <groupId>com.miniso.boot</groupId>
+                <artifactId>miniso-boot-apollo-autoconfiguration</artifactId>
+                <version>${miniso-boot-version}</version>
             </dependency>
             <dependency>
-                <groupId>com.leqee.boot</groupId>
-                <artifactId>leqee-boot-xxl-job-autoconfiguration</artifactId>
-                <version>${leqee-boot-version}</version>
+                <groupId>com.miniso.boot</groupId>
+                <artifactId>miniso-boot-xxl-job-autoconfiguration</artifactId>
+                <version>${miniso-boot-version}</version>
             </dependency>
             <dependency>
-                <groupId>com.leqee.boot</groupId>
-                <artifactId>leqee-boot-dubbo-mockito</artifactId>
-                <version>${leqee-boot-version}</version>
+                <groupId>com.miniso.boot</groupId>
+                <artifactId>miniso-boot-dubbo-mockito</artifactId>
+                <version>${miniso-boot-version}</version>
             </dependency>
             <dependency>
-                <groupId>com.leqee.boot</groupId>
-                <artifactId>leqee-boot-common</artifactId>
-                <version>${leqee-boot-version}</version>
+                <groupId>com.miniso.boot</groupId>
+                <artifactId>miniso-boot-common</artifactId>
+                <version>${miniso-boot-version}</version>
             </dependency>
             <dependency>
-                <groupId>com.leqee.boot</groupId>
-                <artifactId>leqee-boot-client</artifactId>
-                <version>${leqee-boot-version}</version>
+                <groupId>com.miniso.boot</groupId>
+                <artifactId>miniso-boot-client</artifactId>
+                <version>${miniso-boot-version}</version>
             </dependency>
             <dependency>
-                <groupId>com.leqee.boot</groupId>
-                <artifactId>leqee-ad-loghub</artifactId>
-                <version>${leqee-boot-version}</version>
+                <groupId>com.miniso.boot</groupId>
+                <artifactId>miniso-loghub</artifactId>
+                <version>${miniso-boot-version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -86,19 +86,19 @@
         <repository>
             <id>releases</id>
             <name>Nexus Release Repository</name>
-            <url>https://nexus.leqee.com/repository/releases/</url>
+            <url>http://13.76.250.64:8081/repository/releases/</url>
         </repository>
         <snapshotRepository>
             <id>snapshots</id>
             <name>Nexus Snapshot Repository</name>
-            <url>https://nexus.leqee.com/repository/snapshots/</url>
+            <url>http://13.76.250.64:8081/repository/snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
 
     <repositories>
         <repository>
-            <id>leqee</id>
-            <url>https://nexus.leqee.com/repository/public/</url>
+            <id>public-proxy</id>
+            <url>http://13.76.250.64:8081/repository/public/</url>
         </repository>
     </repositories>
 
