@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.miniso.boot.autoconfiguration.common.DefaultConstants.DEV_HOST;
+import static com.miniso.boot.autoconfiguration.common.DefaultConstants.TEST_HOST;
 
 @Configuration
 @ConditionalOnBean({CatBeanImportRegistrar.EnableCatChecker.class})
@@ -47,7 +48,7 @@ public class MinisoBootCatAutoConfiguration implements InitializingBean, Applica
 
     static {
         CAT_SERVER_LIST.put("dev", DEV_HOST);
-        CAT_SERVER_LIST.put("fat", "10.0.16.134");
+        CAT_SERVER_LIST.put("fat", TEST_HOST);
         CAT_SERVER_LIST.put("local", "127.0.0.1");
         CAT_SERVER_LIST.put("prod", "10.0.16.140");
     }
@@ -61,7 +62,7 @@ public class MinisoBootCatAutoConfiguration implements InitializingBean, Applica
     @Value("${spring.application.name:unknown}")
     private String applicationName;
 
-    @Value("${miniso.infra.cat.servers}")
+    @Value("${miniso.infra.cat.servers:unset}")
     private String[] servers;
 
     @Bean
@@ -78,6 +79,11 @@ public class MinisoBootCatAutoConfiguration implements InitializingBean, Applica
 
     @Bean
     public FilterRegistrationBean catFilter() {
+        if (servers == null || servers.length == 0 || "unset".equalsIgnoreCase(servers[0])) {
+            logger.error("\n\n\n\n\n**************\nCAT server is never specified\n*****************\n");
+            servers = null;
+        }
+
         initCatLogger();
 
         ClientConfigProperty property = new ClientConfigProperty();

@@ -17,6 +17,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.miniso.boot.autoconfiguration.common.DefaultConstants.TEST_HOST;
+
 /**
  * 自动装配Apollo的远程配置；不同的环境不同的server地址；
  */
@@ -33,8 +35,8 @@ public class MinisoBootApolloAutoConfiguration implements SmartInitializingSingl
         APOLLO_CONFIGURATION_SERVER.put("local", "http://127.0.0.1:30004");
 
         //Test and FAT are the same env.
-        APOLLO_CONFIGURATION_SERVER.put("fat", "http://10.0.16.134:30004");
-        APOLLO_CONFIGURATION_SERVER.put("test", "http://10.0.16.134:30004");
+        APOLLO_CONFIGURATION_SERVER.put("fat", String.format("http://%s:30004", TEST_HOST));
+        APOLLO_CONFIGURATION_SERVER.put("test", String.format("http://%s:30004", TEST_HOST));
 
         APOLLO_CONFIGURATION_SERVER.put("prod", "http://10.0.16.140:30004");
 
