@@ -24,7 +24,7 @@ import static com.miniso.boot.autoconfiguration.common.DefaultConstants.TEST_HOS
  */
 @Configuration
 @ConditionalOnBean({ApolloBeanImportRegistrar.EnableApolloChecker.class})
-@EnableApolloConfig({ConfigConsts.NAMESPACE_APPLICATION, "miniso.infra-config"})
+@EnableApolloConfig({ConfigConsts.NAMESPACE_APPLICATION, "ecom-tech.infra-config"})
 public class MinisoBootApolloAutoConfiguration implements SmartInitializingSingleton {
     private static final Logger logger = LoggerFactory.getLogger(MinisoBootApolloAutoConfiguration.class);
 
