@@ -40,7 +40,7 @@ public class MinisoBootApolloAutoConfiguration implements SmartInitializingSingl
 
         APOLLO_CONFIGURATION_SERVER.put("prod", "http://10.0.16.140:30004");
 
-        String configServer = System.getProperty("leqee.apollo.server", "");
+        String configServer = System.getProperty("miniso.apollo.server", "");
         if (StringUtils.isEmpty(configServer)) {
             configServer = APOLLO_CONFIGURATION_SERVER.get(EnvUtil.getEnv());
         }
