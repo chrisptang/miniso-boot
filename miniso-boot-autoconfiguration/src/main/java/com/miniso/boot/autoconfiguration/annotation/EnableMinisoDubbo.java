@@ -13,7 +13,7 @@ import java.lang.annotation.*;
 @Documented
 @DubboComponentScan
 @Import(DubboBeanImportRegistrar.class)
-public @interface EnableLeqeeDubbo {
+public @interface EnableMinisoDubbo {
 
     /**
      * Base packages to scan for annotated @Service classes.

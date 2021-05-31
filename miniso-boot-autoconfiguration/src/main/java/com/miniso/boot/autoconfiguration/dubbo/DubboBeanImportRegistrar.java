@@ -11,11 +11,11 @@ public class DubboBeanImportRegistrar implements ImportBeanDefinitionRegistrar {
 
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
-        registry.registerBeanDefinition("enableLeqeeDubboChecker", new RootBeanDefinition(EnableLeqeeDubboChecker.class));
+        registry.registerBeanDefinition("enableMinisoDubboChecker", new RootBeanDefinition(EnableMinisoDubboChecker.class));
     }
 
-    public static class EnableLeqeeDubboChecker {
-        public EnableLeqeeDubboChecker() {
+    public static class EnableMinisoDubboChecker {
+        public EnableMinisoDubboChecker() {
             log.info("Dubbo is enabled..");
         }
     }

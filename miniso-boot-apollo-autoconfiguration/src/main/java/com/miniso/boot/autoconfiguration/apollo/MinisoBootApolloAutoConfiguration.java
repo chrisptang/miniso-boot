@@ -24,7 +24,7 @@ import static com.miniso.boot.autoconfiguration.common.DefaultConstants.TEST_HOS
  */
 @Configuration
 @ConditionalOnBean({ApolloBeanImportRegistrar.EnableApolloChecker.class})
-@EnableApolloConfig({ConfigConsts.NAMESPACE_APPLICATION, "miniso.infra-config"})
+@EnableApolloConfig({ConfigConsts.NAMESPACE_APPLICATION, "ecom-tech.infra-config"})
 public class MinisoBootApolloAutoConfiguration implements SmartInitializingSingleton {
     private static final Logger logger = LoggerFactory.getLogger(MinisoBootApolloAutoConfiguration.class);
 
@@ -40,7 +40,7 @@ public class MinisoBootApolloAutoConfiguration implements SmartInitializingSingl
 
         APOLLO_CONFIGURATION_SERVER.put("prod", "http://10.0.16.140:30004");
 
-        String configServer = System.getProperty("leqee.apollo.server", "");
+        String configServer = System.getProperty("miniso.apollo.server", "");
         if (StringUtils.isEmpty(configServer)) {
             configServer = APOLLO_CONFIGURATION_SERVER.get(EnvUtil.getEnv());
         }

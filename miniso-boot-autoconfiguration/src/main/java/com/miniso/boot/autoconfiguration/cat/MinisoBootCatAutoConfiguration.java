@@ -37,7 +37,7 @@ import static com.miniso.boot.autoconfiguration.common.DefaultConstants.TEST_HOS
 @Configuration
 @ConditionalOnBean({CatBeanImportRegistrar.EnableCatChecker.class})
 @PropertySource("classpath:miniso-cat.properties")
-@ConfigurationProperties(prefix = "leqee-boot.cat")
+@ConfigurationProperties(prefix = "miniso-boot.cat")
 public class MinisoBootCatAutoConfiguration implements InitializingBean, ApplicationContextAware {
 
     private static final Logger logger = LoggerFactory.getLogger(MinisoBootCatAutoConfiguration.class);
